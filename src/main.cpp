@@ -48,7 +48,7 @@ lcd.setCursor(3,0);
 lcd.print("APM TERMINAL");
 lcd.setCursor(4,1);
 lcd.print("SISTEMA VAN");
-delay(5000);
+delay(3000);
   for (int posicao = 0; posicao < 5; posicao++)
   {
     lcd.scrollDisplayLeft(); // Rolagem para a esquerda
@@ -87,8 +87,6 @@ void setup()
   lcd.begin(16,2);
   //Liga o blacklight
   lcd.backlight();
-  //Chama a funcção tela_inicial()
-  tela_inicial();
   // Variavel pinbotao definida como entrada(INPUT)
   pinMode(pinbotao, INPUT);
   // Variavel led_botão definida como saída.(OUTPUT) 
@@ -96,10 +94,12 @@ void setup()
   // Inicia o serial de leitura do xbee no BAUD RATE 9600
   XBee.begin(9600);
   // Inicia o serial monitor no BAUD RATE 9600 
-  //Serial.begin(9600); 
+  //Serial.begin(9600);
+  //Chama a função tela_inicial()
+  tela_inicial(); 
 }
 
 void loop()
 { // Será repetido infinitamente pelo arduino
-  
+ 
 }
