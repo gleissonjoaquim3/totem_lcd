@@ -28,53 +28,78 @@ int lcdRows = 2;
 //Se voce não sabe qual o endereço do seu LCD terá que rodar um programa para scanear(Por exemplo: I2C scanner sketch).
 LiquidCrystal_I2C lcd(0x27, lcdColumns, lcdRows);  
 
-SoftwareSerial XBee(2, 3); // RX: Arduino pin 2, XBee pin DOUT.  TX:  Arduino pin 3, XBee pin DIN
-#define pinbotao 15 // Botão definido na entrada digital 12
+// RX: Arduino pin 2, XBee pin DOUT.  TX:  Arduino pin 3, XBee pin DIN
+SoftwareSerial XBee(2, 3); 
+// Botão definido na entrada digital 15 (GPIO15)
+#define pinbotao 15 
 #define led_botao 2
 
-boolean estadobotao = false; // Definido estado da variavel estadodobotao tipo verdadeiro ou falsa
-boolean estantbotao = false; // Definido estado da variavel estantbotão na variavel tipo verdadeiro ou falsa
+// Definido estado da variavel estadodobotao tipo verdadeiro ou falsa
+boolean estadobotao = false; 
+// Definido estado da variavel estantbotão na variavel tipo verdadeiro ou falsa
+boolean estantbotao = false; 
+//Definido estado da variavel troca tipo verdadeiro ou falsa
+boolean troca = false;
+
+void tela_inicial () // Função que mostra mensagem ao ligar o dispositivo
+{
+  //Posiciona o cursor, primeiro a coluna depois a linha
+lcd.setCursor(3,0);
+lcd.print("APM TERMINAL");
+lcd.setCursor(4,1);
+lcd.print("SISTEMA VAN");
+delay(5000);
+  for (int posicao = 0; posicao < 5; posicao++)
+  {
+    lcd.scrollDisplayLeft(); // Rolagem para a esquerda
+    delay(150);
+  }
+  for (int posicao = 0; posicao < 10; posicao++)
+  {
+    lcd.scrollDisplayRight(); //Rolagem para a direita
+    delay(150);
+  }
+  for (int posicao = 0; posicao < 5; posicao++)
+  {
+    lcd.scrollDisplayLeft(); // Rolagem para a esquerda
+    delay(150);
+  }
+delay(3000);
+lcd.clear();
+}
+
+void tela_espera ()
+{
+ lcd.setCursor(2,0);
+ lcd.print("APM TERMINAL");
+ }
+//Função que mostra mensagem quado a van é solicitada
+void chama_van ()
+{
+ lcd.setCursor(2,0);
+ lcd.print("VAN A CAMINHO !");
+ lcd.setCursor(4,1);
+ lcd.print("AGUARDE...");
+}
 
 void setup()
 { // Inicializa o LCD
-  lcd.init();
+  lcd.begin(16,2);
   //Liga o blacklight
   lcd.backlight();
-  //Posiciona o cursor, primeiro a coluna depois a linha
-  lcd.setCursor(2,0);
-  // Manda uma mensagem
-  lcd.print("APM TERMINAL");
-  lcd.setCursor(3,1);
-  lcd.print("VAN OFICINA");
-  delay(3000);
-  pinMode(pinbotao, INPUT); // Variavel pinbotao definida como entrada(INPUT)
+  //Chama a funcção tela_inicial()
+  tela_inicial();
+  // Variavel pinbotao definida como entrada(INPUT)
+  pinMode(pinbotao, INPUT);
+  // Variavel led_botão definida como saída.(OUTPUT) 
   pinMode(led_botao,OUTPUT);
-
-   XBee.begin(9600); // Inicia o serial de leitura do xbee no BAUD RATE 9600
-  //Serial.begin(9600); // Inicia o serial monitor no BAUD RATE 9600
+  // Inicia o serial de leitura do xbee no BAUD RATE 9600
+  XBee.begin(9600);
+  // Inicia o serial monitor no BAUD RATE 9600 
+  //Serial.begin(9600); 
 }
 
 void loop()
 { // Será repetido infinitamente pelo arduino
-  XBee.available();  // Verifica se há algum xbee disponivel
-  char c = XBee.read(); // Armazena na variavel c o sinal recebido
-  //Serial.print(c);
-  estadobotao = digitalRead(pinbotao); // estadobotao recebe o sinal do botão
-
-  if (estadobotao == HIGH) // se o botão for pressionado
-  {
-    XBee.write('L');
-    delay(500); // Manda um caracter 'L' para outro disposisivo
-  }
-
-  if (estadobotao && !estantbotao ) // Condição que compara o estado atual com o estado anterior do botão
-  {
-  }
-
-  if (c == 'l' ) // Condição caso receba o caracter correto e o pisca for false
-  {
-    // Acende o led verde por x segundos e apaga o led vermelho
-  }
-   // Aqui digo que caso o botao seja acionado entrará em modo de pisca
-  delay(200);
+  
 }
